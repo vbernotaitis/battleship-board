@@ -1,0 +1,107 @@
+﻿@page "/"
+@using BattleShipBoard.Engine
+@using BattleShipBoard.Interfaces
+@using Microsoft.Extensions.DependencyInjection
+@inject IServiceProvider ServiceProvider
+
+<div class="container mb-5">
+    @if (!string.IsNullOrEmpty(_errorMessage.Value))
+    {
+        <div class="row">
+            <div class="col text-center">
+                <div class="alert alert-danger" role="alert">
+                    @_errorMessage
+                </div>
+            </div>
+        </div>
+    }
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-primary mr-2" @onclick="StartNewGame">Start new game</button>
+        @if (_game != null && _game.Winner == null && string.IsNullOrEmpty(_errorMessage.Value))
+        {
+            <button class="btn btn-primary mr-2" @onclick="Shoot">Step</button>
+            <button class="btn btn-primary mr-2" @onclick="Auto">Auto</button>
+        }
+    </div>
+</div>
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col text-center">
+            <h2>@(_game != null ? _game.Player1.Name : "Player 1") @WinnerMessage(_game?.Player1)</h2>
+            <div class="d-flex justify-content-center">
+                <BattleField Fields="@_game?.Player1.BattleField" LastShot="@_lastShot1"></BattleField>
+            </div>
+        </div>
+        <div class="col text-center">
+            <h2>@(_game != null ? _game.Player2.Name : "Player 2")  @WinnerMessage(_game?.Player2)</h2>
+            <div class="d-flex justify-content-center">
+                <BattleField Fields="@_game?.Player2.BattleField" LastShot="@_lastShot2"></BattleField>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private BattleShipGame _game;
+    private Coordinates _lastShot1;
+    private Coordinates _lastShot2;
+    private MarkupString _errorMessage;
+
+    void StartNewGame()
+    {
+        try
+        {
+            _game = ServiceProvider.GetService<BattleShipGame>();
+            _lastShot1 = null;
+            _lastShot2 = null;
+            _errorMessage = new MarkupString();
+        }
+        catch (Exception e)
+        {
+            _errorMessage = new MarkupString($"Error occured while creating a battle field! <hr> {e.Message}");
+        }
+    }
+
+    void Shoot()
+    {
+        try
+        {
+            if (_game.Winner != null) return;
+            if (_game.Defender == _game.Player1)
+            {
+                _lastShot1 = _game.Shoot();
+                _lastShot2 = null;
+            }
+            else
+            {
+                _lastShot1 = null;
+                _lastShot2 = _game.Shoot();
+            }
+        }
+        catch (Exception e)
+        {
+            _errorMessage = new MarkupString($"Error occured while shooting! <hr> {e.Message}");
+        }
+    }
+
+    void Auto()
+    {
+        while (_game.Winner == null && string.IsNullOrEmpty(_errorMessage.Value))
+        {
+            Shoot();
+        }
+        _lastShot1 = null;
+        _lastShot2 = null;
+    }
+
+    MarkupString WinnerMessage(BattleShipPlayer player)
+    {
+        var result = "";
+        if (_game?.Winner != null && _game?.Winner == player)
+        {
+            result = @"<span class=""badge badge-success"">Winner!</span>";
+        }
+        return new MarkupString(result);
+    }
+}
