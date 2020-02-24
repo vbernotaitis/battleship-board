@@ -2,12 +2,12 @@
 {
     public interface IBattleShipShooter
     {
-        string Name { get; set; }
+        string CaptainName { get; set; }
 
         Ship[] GetShips();
 
         Coordinates Shoot();
 
-        void RecordLastShot(Coordinates coordinates, FieldState state);
+        void RecordLastShot(Coordinates coordinates, ShotResult result);
     }
 }

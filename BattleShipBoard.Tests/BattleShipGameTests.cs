@@ -95,5 +95,27 @@ namespace BattleShipBoard.Tests
 
             Assert.Throws<Exception>(() => new BattleShipGame(player1.Object, player1.Object));
         }
+
+        [TestCase(1, ShotResult.Destroyed)]
+        [TestCase(2, ShotResult.Hit)]
+        public void RecordsLastShotCorrectly(int shipSize, ShotResult expectedShotResult)
+        {
+            var player1 = new Mock<IBattleShipShooter>();
+            var player2 = new Mock<IBattleShipShooter>();
+            var ships = new[]
+            {
+                new Ship('A', 1, 'A', 1),
+                new Ship('A', 1, 'A', 2),
+            };
+            var coordinates = new Coordinates('A',1);
+
+            player2.Setup(x => x.GetShips()).Returns(ships.Where(s => s.Size == shipSize).ToArray);
+            player1.Setup(x => x.Shoot()).Returns(coordinates);
+
+            var game = new BattleShipGame(player1.Object, player2.Object);
+            game.Shoot();
+
+            player1.Verify(x => x.RecordLastShot(coordinates, expectedShotResult));
+        }
     }
 }

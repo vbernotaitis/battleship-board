@@ -18,14 +18,14 @@ namespace BattleShipBoard.Engine
                 throw new Exception($"Cannot initiate shooter {name ?? shooterType.FullName}! Error: {e.InnerException?.Message ?? e.Message}");
             }
 
-            Name = string.IsNullOrEmpty(name) ? _originalShooter.Name : name;
-            if (string.IsNullOrEmpty(Name))
+            CaptainName = string.IsNullOrEmpty(name) ? _originalShooter.CaptainName : name;
+            if (string.IsNullOrEmpty(CaptainName))
             {
                 throw new Exception($"Shooter {shooterType.FullName} doesn't have a name!");
             }
         }
 
-        public string Name { get; set; }
+        public string CaptainName { get; set; }
 
 
         public Ship[] GetShips()
@@ -36,7 +36,7 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
-                throw new Exception($"{Name} failed. {e.Message}");
+                throw new Exception($"{CaptainName} failed. {e.Message}");
             }
             
         }
@@ -49,11 +49,11 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
-                throw new Exception($"{Name} failed. {e.Message}");
+                throw new Exception($"{CaptainName} failed. {e.Message}");
             }
         }
 
-        public void RecordLastShot(Coordinates coordinates, FieldState state)
+        public void RecordLastShot(Coordinates coordinates, ShotResult state)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
-                throw new Exception($"{Name} failed. {e.Message}");
+                throw new Exception($"{CaptainName} failed. {e.Message}");
             }
         }
     }

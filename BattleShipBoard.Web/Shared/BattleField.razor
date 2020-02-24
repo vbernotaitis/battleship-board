@@ -1,4 +1,5 @@
-﻿@using BattleShipBoard.Interfaces
+﻿@using BattleShipBoard.Engine
+@using BattleShipBoard.Interfaces
 
 <table class="table-bordered table-dark">
     @for (var y = -1; y < Size; y++)
@@ -37,7 +38,7 @@
 
 @code {
     [Parameter] public int Size { get; set; } = 10;
-    [Parameter] public FieldState[][] Fields { get; set; }
+    [Parameter] public Field[][] Fields { get; set; }
     [Parameter] public Coordinates LastShot { get; set; }
     readonly string[] _letters = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" };
 
@@ -46,7 +47,7 @@
         string state = "table-light";
         if (Fields != null && Fields.Length >= y && Fields[y].Length >= x)
         {
-            switch (Fields[y][x])
+            switch (Fields[y][x].State)
             {
                 case FieldState.Ship:
                     state = "bg-primary";

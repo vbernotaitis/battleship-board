@@ -1,15 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BattleShipBoard.Interfaces;
 
 namespace BattleShipBoard.Engine
 {
     public class BattleShipGame
     {
-        public BattleShipPlayer Player1 { get; set; }
-        public BattleShipPlayer Player2 { get; set; }
-        public BattleShipPlayer Attacker { get; set; }
-        public BattleShipPlayer Defender { get; set; }
-        public BattleShipPlayer Winner { get; set; }
+        public BattleShipPlayer Player1 { get; }
+        public BattleShipPlayer Player2 { get; }
+        public BattleShipPlayer Attacker { get; private set; }
+        public BattleShipPlayer Defender { get; private set; }
+        public BattleShipPlayer Winner { get; private set; }
 
         public BattleShipGame(IBattleShipShooter shooter1, IBattleShipShooter shooter2)
         {
@@ -23,18 +24,23 @@ namespace BattleShipBoard.Engine
         public Coordinates Shoot()
         {
             var shot = Attacker.Shooter.Shoot();
-            switch (Defender.BattleField[shot.X][shot.Y])
+            var field = Defender.BattleField[shot.X][shot.Y];
+
+            switch (field.State)
             {
                 case FieldState.Empty:
-                    Defender.BattleField[shot.X][shot.Y] = FieldState.Miss;
+                    field.State = FieldState.Miss;
+                    Attacker.Shooter.RecordLastShot(shot, ShotResult.Missed);
                     SwitchPlayer();
                     break;
                 case FieldState.Ship:
-                    Defender.BattleField[shot.X][shot.Y] = FieldState.Hit;
+                    field.State = FieldState.Hit;
+                    Attacker.Shooter.RecordLastShot(shot,
+                        field.RelatedFields.Any(f => f.State == FieldState.Ship)
+                            ? ShotResult.Hit
+                            : ShotResult.Destroyed);
                     break;
             }
-
-            Attacker.Shooter.RecordLastShot(shot, Defender.BattleField[shot.X][shot.Y]);
 
             if (AreAllShipsDestroyed())
             {
@@ -52,7 +58,7 @@ namespace BattleShipBoard.Engine
 
         private bool AreAllShipsDestroyed()
         {
-            return Defender.BattleField.SelectMany(x => x).All(x => x != FieldState.Ship);
+            return Defender.BattleField.SelectMany(x => x).All(x => x.State != FieldState.Ship);
         }
     }
 }

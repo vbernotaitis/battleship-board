@@ -9,15 +9,16 @@ namespace BattleShipBoard.Engine
         public BattleShipPlayer(IBattleShipShooter shooter)
         {
             Shooter = shooter;
-            Name = shooter.Name;
-            BattleField = CoordinatesTransformer.ToMatrix(ValidateShips(shooter.GetShips()));
+            Name = shooter.CaptainName;
+            BattleField = BattleFieldFactory.CreateEmpty();
+            BattleField.AddShips(ValidateShips(shooter.GetShips()));
         }
 
         public string Name { get; }
 
         public IBattleShipShooter Shooter { get; }
 
-        public FieldState[][] BattleField { get; }
+        public Field[][] BattleField { get; }
 
         private Ship[] ValidateShips(Ship[] ships)
         {

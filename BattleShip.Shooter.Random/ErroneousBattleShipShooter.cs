@@ -15,7 +15,7 @@ namespace BattleShip.Shooter.Random
             }
         };
 
-        public string Name { get; set; }
+        public string CaptainName { get; set; }
 
         public Ship[] GetShips()
         {
@@ -27,7 +27,7 @@ namespace BattleShip.Shooter.Random
             return new Coordinates('A', 1);
         }
 
-        public void RecordLastShot(Coordinates coordinates, FieldState state)
+        public void RecordLastShot(Coordinates coordinates, ShotResult state)
         {
             throw new Exception("Unexpected error!");
         }
