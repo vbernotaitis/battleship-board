@@ -5,7 +5,7 @@ namespace BattleShipBoard.Engine
 {
     public static class CoordinatesTransformer
     {
-        public static FieldState[][] ToMatrix(ShipCoordinates[] shipCoordinates)
+        public static FieldState[][] ToMatrix(Ship[] shipCoordinates)
         {
             var range = Enumerable.Repeat(1, 10).ToArray();
             var matrix = range

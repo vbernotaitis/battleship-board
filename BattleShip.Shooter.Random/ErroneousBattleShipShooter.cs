@@ -6,17 +6,18 @@ namespace BattleShip.Shooter.Random
 {
     public class ErroneousBattleShipShooter : IBattleShipShooter
     {
-        private readonly ShipCoordinates[][] _maps = new[]
+        private readonly Ship[][] _maps = new[]
         {
             new[]
             {
-                new ShipCoordinates('A', 1, 'A', 2)
+                new Ship('A', 1, 'A', 4),
+                new Ship('B', 1, 'B', 4),
             }
         };
 
         public string Name { get; set; }
 
-        public ShipCoordinates[] GetShipsCoordinates()
+        public Ship[] GetShips()
         {
             return _maps[0];
         }
@@ -26,7 +27,7 @@ namespace BattleShip.Shooter.Random
             return new Coordinates('A', 1);
         }
 
-        public void Record(Coordinates coordinates, FieldState state)
+        public void RecordLastShot(Coordinates coordinates, FieldState state)
         {
             throw new Exception("Unexpected error!");
         }

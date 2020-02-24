@@ -12,7 +12,7 @@ namespace BattleShipBoard.Web
             services.AddTransient(x =>
                 new BattleShipGame(
                     new BattleShipShooterExceptionWrapper(typeof(BattleShipShooter)),
-                    new BattleShipShooterExceptionWrapper(typeof(BattleShipShooter), "Petras"))
+                    new BattleShipShooterExceptionWrapper(typeof(ErroneousBattleShipShooter), "Petras"))
             );
         }
 

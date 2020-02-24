@@ -4,10 +4,10 @@
     {
         string Name { get; set; }
 
-        ShipCoordinates[] GetShipsCoordinates();
+        Ship[] GetShips();
 
         Coordinates Shoot();
 
-        void Record(Coordinates coordinates, FieldState state);
+        void RecordLastShot(Coordinates coordinates, FieldState state);
     }
 }

@@ -34,7 +34,7 @@ namespace BattleShipBoard.Engine
                     break;
             }
 
-            Attacker.Shooter.Record(shot, Defender.BattleField[shot.X][shot.Y]);
+            Attacker.Shooter.RecordLastShot(shot, Defender.BattleField[shot.X][shot.Y]);
 
             if (AreAllShipsDestroyed())
             {

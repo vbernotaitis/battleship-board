@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using System.Linq;
 using BattleShipBoard.Engine;
 using BattleShipBoard.Interfaces;
 using Moq;
@@ -27,11 +29,11 @@ namespace BattleShipBoard.Tests
         {
             var player1 = new Mock<IBattleShipShooter>();
             var player2 = new Mock<IBattleShipShooter>();
-            var ships = new[]{ new ShipCoordinates('A', 1, 'A', 1) };
+            var ships = new[]{ new Ship('A', 1, 'A', 1) };
             var coordinates = new Coordinates('B',2);
 
-            player1.Setup(x => x.GetShipsCoordinates()).Returns(ships);
-            player2.Setup(x => x.GetShipsCoordinates()).Returns(ships);
+            player1.Setup(x => x.GetShips()).Returns(ships);
+            player2.Setup(x => x.GetShips()).Returns(ships);
             player1.Setup(x => x.Shoot()).Returns(coordinates);
             player2.Setup(x => x.Shoot()).Returns(coordinates);
 
@@ -47,11 +49,11 @@ namespace BattleShipBoard.Tests
         {
             var player1 = new Mock<IBattleShipShooter>();
             var player2 = new Mock<IBattleShipShooter>();
-            var ships = new[]{ new ShipCoordinates('A', 1, 'A', 1) };
+            var ships = new[]{ new Ship('A', 1, 'A', 1) };
             var coordinates = new Coordinates('A',1);
 
-            player1.Setup(x => x.GetShipsCoordinates()).Returns(ships);
-            player2.Setup(x => x.GetShipsCoordinates()).Returns(ships);
+            player1.Setup(x => x.GetShips()).Returns(ships);
+            player2.Setup(x => x.GetShips()).Returns(ships);
             player1.Setup(x => x.Shoot()).Returns(coordinates);
             player2.Setup(x => x.Shoot()).Returns(coordinates);
 
@@ -71,6 +73,27 @@ namespace BattleShipBoard.Tests
             var game = new BattleShipGame(player1.Object, player1.Object);
 
             Assert.Throws<ArgumentException>(() => game.Shoot());
+        }
+
+        [TestCase(2, 4)]
+        [TestCase(3, 3)]
+        [TestCase(4, 2)]
+        [TestCase(5, 1)]
+        public void ThrowsErrorWhenTooMuchShipsBySize(int count, int size)
+        {
+            var player1 = new Mock<IBattleShipShooter>();
+            var ships = new[]
+            {
+                new Ship('A', 1, 'A', size),
+                new Ship('B', 1, 'B', size),
+                new Ship('C', 1, 'C', size),
+                new Ship('D', 1, 'D', size),
+                new Ship('F', 1, 'F', size)
+            };
+
+            player1.Setup(x => x.GetShips()).Returns(ships.Take(count).ToArray);
+
+            Assert.Throws<Exception>(() => new BattleShipGame(player1.Object, player1.Object));
         }
     }
 }

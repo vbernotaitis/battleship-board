@@ -9,7 +9,7 @@ namespace BattleShipBoard.Tests
         [Test]
         public void Test()
         {
-            var coordinates = new ShipCoordinates[0];
+            var coordinates = new Ship[0];
             var result = CoordinatesTransformer.ToMatrix(coordinates);
 
         }

@@ -7,39 +7,39 @@ namespace BattleShip.Shooter.Random
     {
         private readonly List<Coordinates> _availableShots = GetAvailableShots();
 
-        private readonly ShipCoordinates[][] _maps = new ShipCoordinates[][]
+        private readonly Ship[][] _maps = new Ship[][]
         {
             new[]
             {
-                new ShipCoordinates('A', 1, 'C', 1),
-                new ShipCoordinates('G', 2, 'H', 2), 
-                new ShipCoordinates('J', 3, 'J', 3), 
-                new ShipCoordinates('B', 4, 'D', 4), 
-                new ShipCoordinates('F', 6, 'F', 6), 
-                new ShipCoordinates('H', 6, 'I', 6), 
-                new ShipCoordinates('D', 7, 'D', 10), 
-                new ShipCoordinates('A', 8, 'A', 8), 
-                new ShipCoordinates('F', 10, 'G', 10), 
-                new ShipCoordinates('J', 9, 'J', 9) 
+                new Ship('A', 1, 'C', 1),
+                new Ship('G', 2, 'H', 2), 
+                new Ship('J', 3, 'J', 3), 
+                new Ship('B', 4, 'D', 4), 
+                new Ship('F', 6, 'F', 6), 
+                new Ship('H', 6, 'I', 6), 
+                new Ship('D', 7, 'D', 10), 
+                new Ship('A', 8, 'A', 8), 
+                new Ship('F', 10, 'G', 10), 
+                new Ship('J', 9, 'J', 9) 
             },
             new[]
             {
-                new ShipCoordinates('F', 1, 'F', 1),
-                new ShipCoordinates('H', 1, 'I', 1), 
-                new ShipCoordinates('C', 2, 'C', 3), 
-                new ShipCoordinates('B', 5, 'B', 5), 
-                new ShipCoordinates('D', 5, 'D', 5), 
-                new ShipCoordinates('F', 4, 'F', 7), 
-                new ShipCoordinates('B', 7, 'B', 9), 
-                new ShipCoordinates('D', 8, 'D', 8), 
-                new ShipCoordinates('G', 9, 'I', 9), 
-                new ShipCoordinates('I', 4, 'I', 5) 
+                new Ship('F', 1, 'F', 1),
+                new Ship('H', 1, 'I', 1), 
+                new Ship('C', 2, 'C', 3), 
+                new Ship('B', 5, 'B', 5), 
+                new Ship('D', 5, 'D', 5), 
+                new Ship('F', 4, 'F', 7), 
+                new Ship('B', 7, 'B', 9), 
+                new Ship('D', 8, 'D', 8), 
+                new Ship('G', 9, 'I', 9), 
+                new Ship('I', 4, 'I', 5) 
             }
         };
 
         public string Name { get; set; } = "Vilimantas";
 
-        public ShipCoordinates[] GetShipsCoordinates()
+        public Ship[] GetShips()
         {
             var random = new System.Random();
             return _maps[random.Next(0, _maps.Length)];
@@ -54,7 +54,7 @@ namespace BattleShip.Shooter.Random
             return shotCordinates;
         }
 
-        public void Record(Coordinates coordinates, FieldState state)
+        public void RecordLastShot(Coordinates coordinates, FieldState state)
         {
 
         }

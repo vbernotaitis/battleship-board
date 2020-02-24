@@ -28,11 +28,11 @@ namespace BattleShipBoard.Engine
         public string Name { get; set; }
 
 
-        public ShipCoordinates[] GetShipsCoordinates()
+        public Ship[] GetShips()
         {
             try
             {
-                return _originalShooter.GetShipsCoordinates();
+                return _originalShooter.GetShips();
             }
             catch (Exception e)
             {
@@ -53,11 +53,11 @@ namespace BattleShipBoard.Engine
             }
         }
 
-        public void Record(Coordinates coordinates, FieldState state)
+        public void RecordLastShot(Coordinates coordinates, FieldState state)
         {
             try
             {
-                _originalShooter.Record(coordinates, state);
+                _originalShooter.RecordLastShot(coordinates, state);
             }
             catch (Exception e)
             {
