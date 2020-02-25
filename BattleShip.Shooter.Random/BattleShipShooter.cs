@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BattleShipBoard.Interfaces;
 
 namespace BattleShip.Shooter.Random
 {
     public class BattleShipShooter : IBattleShipShooter
     {
-        private readonly List<Coordinates> _availableShots = GetAvailableShots();
+        private int _gamesCount = 0;
+        private List<Coordinates> _availableShots;
 
         private readonly Ship[][] _maps = new Ship[][]
         {
@@ -41,6 +43,9 @@ namespace BattleShip.Shooter.Random
 
         public Ship[] PrepareShipsForNewBattle()
         {
+            Console.WriteLine($"Games count: {++_gamesCount}");
+
+            _availableShots = GetAvailableShots();
             var random = new System.Random();
             return _maps[random.Next(0, _maps.Length)];
         }
@@ -49,6 +54,7 @@ namespace BattleShip.Shooter.Random
         {
             var random = new System.Random();
             var index = random.Next(0, _availableShots.Count);
+            Console.WriteLine($"{_availableShots.Count}, {index}");
             var shotCordinates = _availableShots[index];
             _availableShots.RemoveAt(index);
             return shotCordinates;

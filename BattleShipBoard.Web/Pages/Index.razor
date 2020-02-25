@@ -27,13 +27,13 @@
 <div class="container">
     <div class="row align-items-center">
         <div class="col text-center">
-            <h2>@(_game != null ? _game.Player1.Name : "Player 1") @WinnerMessage(_game?.Player1)</h2>
+            <h2>@(_game != null ? _game.Player1.Shooter.CaptainName : "Player 1") @WinnerMessage(_game?.Player1)</h2>
             <div class="d-flex justify-content-center">
                 <BattleField Fields="@_game?.Player1.BattleField" LastShot="@_lastShot1"></BattleField>
             </div>
         </div>
         <div class="col text-center">
-            <h2>@(_game != null ? _game.Player2.Name : "Player 2")  @WinnerMessage(_game?.Player2)</h2>
+            <h2>@(_game != null ? _game.Player2.Shooter.CaptainName : "Player 2")  @WinnerMessage(_game?.Player2)</h2>
             <div class="d-flex justify-content-center">
                 <BattleField Fields="@_game?.Player2.BattleField" LastShot="@_lastShot2"></BattleField>
             </div>
@@ -48,11 +48,16 @@
     private Coordinates _lastShot2;
     private MarkupString _errorMessage;
 
+    protected override void OnInitialized()
+    {
+        _game = ServiceProvider.GetService<BattleShipGame>();
+    }
+
     void StartNewGame()
     {
         try
         {
-            _game = ServiceProvider.GetService<BattleShipGame>();
+            _game.StarNewGame();
             _lastShot1 = null;
             _lastShot2 = null;
             _errorMessage = new MarkupString();

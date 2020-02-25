@@ -16,9 +16,16 @@ namespace BattleShipBoard.Engine
         {
             Player1 = new BattleShipPlayer(shooter1);
             Player2 = new BattleShipPlayer(shooter2);
+        }
 
-            Attacker = Player1;
-            Defender = Player2;
+        public void StarNewGame()
+        {
+            Player1.PrepareForNewGame();
+            Player2.PrepareForNewGame();
+
+            Winner = null;
+
+            RandomizeWhoShouldStart();
         }
 
         public Coordinates Shoot()
@@ -61,6 +68,17 @@ namespace BattleShipBoard.Engine
         private bool AreAllShipsDestroyed()
         {
             return Defender.BattleField.SelectMany(x => x).All(x => x.State != FieldState.Ship);
+        }
+
+        private void RandomizeWhoShouldStart()
+        {
+            var random = new Random();
+            var players = new[] {Player1, Player2}
+                .OrderBy(x => random.Next())
+                .ToArray();
+
+            Attacker = players[0];
+            Defender = players[1];
         }
     }
 }

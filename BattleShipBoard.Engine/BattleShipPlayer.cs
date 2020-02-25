@@ -9,16 +9,17 @@ namespace BattleShipBoard.Engine
         public BattleShipPlayer(IBattleShipShooter shooter)
         {
             Shooter = shooter;
-            Name = shooter.CaptainName;
-            BattleField = BattleFieldFactory.CreateEmpty();
-            BattleField.AddShips(ValidateShips(shooter.PrepareShipsForNewBattle()));
         }
-
-        public string Name { get; }
 
         public IBattleShipShooter Shooter { get; }
 
-        public Field[][] BattleField { get; }
+        public Field[][] BattleField { get; private set; }
+
+        public void PrepareForNewGame()
+        {
+            BattleField = BattleFieldFactory.CreateEmpty();
+            BattleField.AddShips(ValidateShips(Shooter.PrepareShipsForNewBattle()));
+        }
 
         private Ship[] ValidateShips(Ship[] ships)
         {

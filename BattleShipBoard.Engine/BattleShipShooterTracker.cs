@@ -16,6 +16,7 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw new Exception($"Cannot initiate shooter {name ?? shooterType.FullName}! Error: {e.InnerException?.Message ?? e.Message}");
             }
 
@@ -39,6 +40,7 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw new Exception($"{CaptainName} failed. {e.Message}");
             }
             
@@ -54,6 +56,7 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw new Exception($"{CaptainName} failed. {e.Message}");
             }
         }
@@ -67,6 +70,7 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw new Exception($"{CaptainName} failed. {e.Message}");
             }
         }
@@ -80,6 +84,7 @@ namespace BattleShipBoard.Engine
             }
             catch (Exception e)
             {
+                Console.WriteLine(JsonConvert.SerializeObject(e));
                 throw new Exception($"{CaptainName} failed. {e.Message}");
             }
         }
