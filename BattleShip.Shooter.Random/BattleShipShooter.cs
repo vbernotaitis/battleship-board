@@ -39,7 +39,7 @@ namespace BattleShip.Shooter.Random
 
         public string CaptainName { get; set; } = "Vilimantas";
 
-        public Ship[] GetShips()
+        public Ship[] PrepareShipsForNewBattle()
         {
             var random = new System.Random();
             return _maps[random.Next(0, _maps.Length)];
@@ -54,9 +54,14 @@ namespace BattleShip.Shooter.Random
             return shotCordinates;
         }
 
-        public void RecordLastShot(Coordinates coordinates, ShotResult result)
+        public void ReportLastShotResult(Coordinates coordinates, ShotResult result)
         {
 
+        }
+
+        public void ReportOponentsLastShotResult(Coordinates coordinates, ShotResult result)
+        {
+            
         }
 
         private static List<Coordinates> GetAvailableShots()

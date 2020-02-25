@@ -32,8 +32,8 @@ namespace BattleShipBoard.Tests
             var ships = new[]{ new Ship('A', 1, 'A', 1) };
             var coordinates = new Coordinates('B',2);
 
-            player1.Setup(x => x.GetShips()).Returns(ships);
-            player2.Setup(x => x.GetShips()).Returns(ships);
+            player1.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships);
+            player2.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships);
             player1.Setup(x => x.Shoot()).Returns(coordinates);
             player2.Setup(x => x.Shoot()).Returns(coordinates);
 
@@ -52,8 +52,8 @@ namespace BattleShipBoard.Tests
             var ships = new[]{ new Ship('A', 1, 'A', 1) };
             var coordinates = new Coordinates('A',1);
 
-            player1.Setup(x => x.GetShips()).Returns(ships);
-            player2.Setup(x => x.GetShips()).Returns(ships);
+            player1.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships);
+            player2.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships);
             player1.Setup(x => x.Shoot()).Returns(coordinates);
             player2.Setup(x => x.Shoot()).Returns(coordinates);
 
@@ -91,7 +91,7 @@ namespace BattleShipBoard.Tests
                 new Ship('F', 1, 'F', size)
             };
 
-            player1.Setup(x => x.GetShips()).Returns(ships.Take(count).ToArray);
+            player1.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships.Take(count).ToArray);
 
             Assert.Throws<Exception>(() => new BattleShipGame(player1.Object, player1.Object));
         }
@@ -109,13 +109,13 @@ namespace BattleShipBoard.Tests
             };
             var coordinates = new Coordinates('A',1);
 
-            player2.Setup(x => x.GetShips()).Returns(ships.Where(s => s.Size == shipSize).ToArray);
+            player2.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships.Where(s => s.Size == shipSize).ToArray);
             player1.Setup(x => x.Shoot()).Returns(coordinates);
 
             var game = new BattleShipGame(player1.Object, player2.Object);
             game.Shoot();
 
-            player1.Verify(x => x.RecordLastShot(coordinates, expectedShotResult));
+            player1.Verify(x => x.ReportLastShotResult(coordinates, expectedShotResult));
         }
     }
 }

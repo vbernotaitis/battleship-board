@@ -30,15 +30,17 @@ namespace BattleShipBoard.Engine
             {
                 case FieldState.Empty:
                     field.State = FieldState.Miss;
-                    Attacker.Shooter.RecordLastShot(shot, ShotResult.Missed);
+                    Attacker.Shooter.ReportLastShotResult(shot, ShotResult.Missed);
+                    Defender.Shooter.ReportOponentsLastShotResult(shot, ShotResult.Missed);
                     SwitchPlayer();
                     break;
                 case FieldState.Ship:
                     field.State = FieldState.Hit;
-                    Attacker.Shooter.RecordLastShot(shot,
-                        field.RelatedFields.Any(f => f.State == FieldState.Ship)
-                            ? ShotResult.Hit
-                            : ShotResult.Destroyed);
+                    var shotResult = field.RelatedFields.Any(f => f.State == FieldState.Ship)
+                        ? ShotResult.Hit
+                        : ShotResult.Destroyed;
+                    Attacker.Shooter.ReportLastShotResult(shot, shotResult);
+                    Defender.Shooter.ReportOponentsLastShotResult(shot, shotResult);
                     break;
             }
 

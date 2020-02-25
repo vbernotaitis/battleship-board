@@ -29,12 +29,12 @@ namespace BattleShipBoard.Engine
         public string CaptainName { get; set; }
 
 
-        public Ship[] GetShips()
+        public Ship[] PrepareShipsForNewBattle()
         {
             try
             {
-                var ships = _originalShooter.GetShips();
-                Console.WriteLine($"{CaptainName}: {JsonConvert.SerializeObject(ships)}");
+                var ships = _originalShooter.PrepareShipsForNewBattle();
+                Console.WriteLine($"{CaptainName} {nameof(PrepareShipsForNewBattle)}: {JsonConvert.SerializeObject(ships)}");
                 return ships;
             }
             catch (Exception e)
@@ -49,7 +49,7 @@ namespace BattleShipBoard.Engine
             try
             {
                 var shot = _originalShooter.Shoot();
-                Console.WriteLine($"{CaptainName}: {JsonConvert.SerializeObject(shot)}");
+                Console.WriteLine($"{CaptainName} {nameof(Shoot)}: {JsonConvert.SerializeObject(shot)}");
                 return shot;
             }
             catch (Exception e)
@@ -58,12 +58,25 @@ namespace BattleShipBoard.Engine
             }
         }
 
-        public void RecordLastShot(Coordinates coordinates, ShotResult state)
+        public void ReportLastShotResult(Coordinates coordinates, ShotResult result)
         {
             try
             {
-                _originalShooter.RecordLastShot(coordinates, state);
-                Console.WriteLine($"{CaptainName}: {JsonConvert.SerializeObject(coordinates)} - {state}");
+                _originalShooter.ReportLastShotResult(coordinates, result);
+                Console.WriteLine($"{CaptainName} {nameof(ReportLastShotResult)}: {JsonConvert.SerializeObject(coordinates)} - {result}");
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"{CaptainName} failed. {e.Message}");
+            }
+        }
+
+        public void ReportOponentsLastShotResult(Coordinates coordinates, ShotResult result)
+        {
+            try
+            {
+                _originalShooter.ReportOponentsLastShotResult(coordinates, result);
+                Console.WriteLine($"{CaptainName} {nameof(ReportOponentsLastShotResult)}: {JsonConvert.SerializeObject(coordinates)} - {result}");
             }
             catch (Exception e)
             {

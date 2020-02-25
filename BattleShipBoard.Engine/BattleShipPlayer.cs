@@ -11,7 +11,7 @@ namespace BattleShipBoard.Engine
             Shooter = shooter;
             Name = shooter.CaptainName;
             BattleField = BattleFieldFactory.CreateEmpty();
-            BattleField.AddShips(ValidateShips(shooter.GetShips()));
+            BattleField.AddShips(ValidateShips(shooter.PrepareShipsForNewBattle()));
         }
 
         public string Name { get; }
