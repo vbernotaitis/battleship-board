@@ -22,7 +22,7 @@
                 else
                 {
                     <td class="@GetFieldStateClass(x, y)">
-                        @if (LastShot?.X == y && LastShot?.Y == x)
+                        @if (LastShot?.X == x && LastShot?.Y == y)
                         {
                             <div class="spinner-grow spinner-grow-sm text-dark" role="status">
                                 <span class="sr-only">Loading...</span>

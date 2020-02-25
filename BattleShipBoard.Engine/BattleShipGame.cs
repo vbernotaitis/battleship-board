@@ -24,7 +24,7 @@ namespace BattleShipBoard.Engine
         public Coordinates Shoot()
         {
             var shot = Attacker.Shooter.Shoot();
-            var field = Defender.BattleField[shot.X][shot.Y];
+            var field = Defender.BattleField[shot.Y][shot.X];
 
             switch (field.State)
             {
