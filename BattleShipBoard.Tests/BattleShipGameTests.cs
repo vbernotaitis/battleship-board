@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Linq;
 using BattleShipBoard.Engine;
 using BattleShipBoard.Interfaces;
@@ -8,7 +7,7 @@ using NUnit.Framework;
 
 namespace BattleShipBoard.Tests
 {
-    public partial class Tests
+    public class BattleShipGameTests
     {
         [SetUp]
         public void Setup()
