@@ -11,7 +11,7 @@ namespace BattleShip.Shooter.Random
             new[]
             {
                 new Ship('A', 1, 'A', 4),
-                new Ship('B', 1, 'B', 4),
+                new Ship('B', 1, 'B', 3),
             }
         };
 

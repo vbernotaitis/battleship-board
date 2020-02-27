@@ -20,6 +20,7 @@ namespace BattleShipBoard.Tests
         {
             var player1 = new Mock<IBattleShipShooter>();
             var game = new BattleShipGame(player1.Object, player1.Object);
+            game.StarNewGame();
 
             Assert.IsNotNull(game);
         }
@@ -38,10 +39,11 @@ namespace BattleShipBoard.Tests
             player2.Setup(x => x.Shoot()).Returns(coordinates);
 
             var game = new BattleShipGame(player1.Object, player2.Object);
+            game.StarNewGame();
 
-            Assert.AreEqual(game.Attacker.Shooter, player1.Object);
-            var shot = game.Shoot();
-            Assert.AreEqual(game.Attacker.Shooter, player2.Object);
+            var attackerBefore = game.Attacker.Shooter;
+            game.Shoot();
+            Assert.AreNotEqual(attackerBefore, game.Attacker.Shooter);
         }
 
         [Test]
@@ -58,10 +60,11 @@ namespace BattleShipBoard.Tests
             player2.Setup(x => x.Shoot()).Returns(coordinates);
 
             var game = new BattleShipGame(player1.Object, player2.Object);
+            game.StarNewGame();
 
-            Assert.AreEqual(game.Attacker.Shooter, player1.Object);
-            var shot = game.Shoot();
-            Assert.AreEqual(game.Attacker.Shooter, player1.Object);
+            var attackerBefore = game.Attacker.Shooter;
+            game.Shoot();
+            Assert.AreEqual(attackerBefore, game.Attacker.Shooter);
         }
 
         [Test]
@@ -71,6 +74,7 @@ namespace BattleShipBoard.Tests
             player1.Setup(x => x.Shoot()).Returns(() => new Coordinates('W',3));
 
             var game = new BattleShipGame(player1.Object, player1.Object);
+            game.StarNewGame();
 
             Assert.Throws<ArgumentException>(() => game.Shoot());
         }
@@ -92,8 +96,9 @@ namespace BattleShipBoard.Tests
             };
 
             player1.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships.Take(count).ToArray);
+            var game = new BattleShipGame(player1.Object, player1.Object);
 
-            Assert.Throws<Exception>(() => new BattleShipGame(player1.Object, player1.Object));
+            Assert.Throws<Exception>(() => game.StarNewGame());
         }
 
         [TestCase(1, ShotResult.Destroyed)]
@@ -109,13 +114,71 @@ namespace BattleShipBoard.Tests
             };
             var coordinates = new Coordinates('A',1);
 
-            player2.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships.Where(s => s.Size == shipSize).ToArray);
             player1.Setup(x => x.Shoot()).Returns(coordinates);
+            player2.Setup(x => x.Shoot()).Returns(coordinates);
+            player1.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships.Where(s => s.Size == shipSize).ToArray);
+            player2.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships.Where(s => s.Size == shipSize).ToArray);
 
             var game = new BattleShipGame(player1.Object, player2.Object);
+            game.StarNewGame();
             game.Shoot();
 
-            player1.Verify(x => x.ReportLastShotResult(coordinates, expectedShotResult));
+            if (game.Attacker.Shooter == player1.Object)
+            {
+                player1.Verify(x => x.ReportLastShotResult(coordinates, expectedShotResult));
+                player2.Verify(x => x.ReportOponentsLastShotResult(coordinates, expectedShotResult));
+            }
+            else
+            {
+                player2.Verify(x => x.ReportLastShotResult(coordinates, expectedShotResult));
+                player1.Verify(x => x.ReportOponentsLastShotResult(coordinates, expectedShotResult));
+            }
+        }
+
+        [TestCase(0, 0, 0, 0, 1, 1, 1, 1)]
+        [TestCase(1, 1, 1, 3, 1, 4, 2, 4)]
+        [TestCase(1, 1, 2, 1, 3, 1, 3, 2)]
+
+        public void ThrowsAnExceptionWhenShipsAreTooCloseToEachOther(int startX1, int startY1, int endX1, int endY1, int startX2, int startY2, int endX2, int endY2)
+        {
+            var player1 = new Mock<IBattleShipShooter>();
+            var ships = new[]
+            {
+                new Ship(startX1, startY1, endX1, endY1),
+                new Ship(startX2, startY2, endX2, endY2)
+            };
+
+            player1.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships);
+
+            var game = new BattleShipGame(player1.Object, player1.Object);
+
+            Assert.That(() => game.StarNewGame(),
+                Throws.TypeOf<ArgumentException>().With.Message.EqualTo(", ships are too close to each other!"));
+        }
+
+        [Test]
+        public void DoesntThrowAnExceptionWhenShipsPlacementIsValid()
+        {
+            var player1 = new Mock<IBattleShipShooter>();
+            var ships = new[]
+            {
+                new Ship('A', 1, 'C', 1),
+                new Ship('G', 2, 'H', 2),
+                new Ship('J', 3, 'J', 3),
+                new Ship('B', 4, 'D', 4),
+                new Ship('F', 6, 'F', 6),
+                new Ship('H', 6, 'I', 6),
+                new Ship('D', 7, 'D', 10),
+                new Ship('A', 8, 'A', 8),
+                new Ship('F', 10, 'G', 10),
+                new Ship('J', 9, 'J', 9)
+            };
+
+            player1.Setup(x => x.PrepareShipsForNewBattle()).Returns(ships);
+
+            var game = new BattleShipGame(player1.Object, player1.Object);
+
+            Assert.That(() => game.StarNewGame(), Throws.Nothing);
         }
     }
 }
