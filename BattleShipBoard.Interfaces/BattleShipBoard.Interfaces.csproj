@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>Koditus</Company>
+    <Product>BattleShipBoard</Product>
+    <PackageId>Koditus.BattleShipBoard.Interfaces</PackageId>
+    <Authors>Vilimantas Bernotaitis</Authors>
   </PropertyGroup>
 
 </Project>

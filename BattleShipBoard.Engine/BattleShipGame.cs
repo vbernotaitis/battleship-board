@@ -36,9 +36,15 @@ namespace BattleShipBoard.Engine
             switch (field.State)
             {
                 case FieldState.Empty:
+                case FieldState.Miss:
                     field.State = FieldState.Miss;
                     Attacker.Shooter.ReportLastShotResult(shot, ShotResult.Missed);
                     Defender.Shooter.ReportOponentsLastShotResult(shot, ShotResult.Missed);
+                    SwitchPlayer();
+                    break;
+                case FieldState.Hit:
+                    Attacker.Shooter.ReportLastShotResult(shot, ShotResult.Hit);
+                    Defender.Shooter.ReportOponentsLastShotResult(shot, ShotResult.Hit);
                     SwitchPlayer();
                     break;
                 case FieldState.Ship:
