@@ -6,6 +6,7 @@
     <Product>BattleShipBoard</Product>
     <PackageId>Koditus.BattleShipBoard.Interfaces</PackageId>
     <Authors>Vilimantas Bernotaitis</Authors>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>
